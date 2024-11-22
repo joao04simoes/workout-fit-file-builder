@@ -2,7 +2,7 @@
     <div>
 
         <button for="messageInput" class="label" @click="saveValue">Step</button>
-
+        <button for="fetchData" class="label" @click="sendData">Send Data</button>
 
         <div>
             <input id="min" v-model="ValueMin" placeholder="minutos" />
@@ -12,36 +12,51 @@
         </div>
 
 
-        <h3>Array 1 (Minutes):</h3>
-        <ul>
-            <li v-for="(item, index) in Vmin" :key="'array1-' + index">{{ item }}</li>
-        </ul>
 
-
-        <h3>Array 2 (Zones):</h3>
-        <ul>
-            <li v-for="(item, index) in Vzones" :key="'array2-' + index">{{ item }}</li>
-        </ul>
+        <pre> {{ jsonData }}</pre>
     </div>
 </template>
 
 <script>
+
+
 export default {
     name: "Step",
     data() {
         return {
             ValueMin: "",
             Valuezone: "",
-            Vmin: [],
-            Vzones: [],
+            "inter": {
+                Vmin: [],
+                Vzones: [],
+            }
         };
     },
+    computed: {
+        jsonData() {
+            return JSON.stringify(this.inter, null, 2);
+        },
+    },
     methods: {
+        async sendData() {
+            const jsonData = JSON.stringify(this.inter)
+            console.log("Sending data:", jsonData); // Debug output
+            // Example using fetch to send JSON
+            await fetch('http://127.0.0.1:5000/api/data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: jsonData,
+            });
+        },
+
+
         saveValue() {
 
             if (this.ValueMin.trim() !== "" && this.Valuezone.trim() !== "") {
-                this.Vmin.push(this.ValueMin);
-                this.Vzones.push(this.Valuezone);
+                this.inter.Vmin.push(this.ValueMin);
+                this.inter.Vzones.push(this.Valuezone);
                 this.ValueMin = "";
                 this.Valuezone = "";
             }
