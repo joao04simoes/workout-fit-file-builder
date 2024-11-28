@@ -8,7 +8,6 @@ from fit_tool.profile.profile_type import Sport, Intensity, WorkoutStepDuration,
 
 
 def workoutBuilder(infoWorkout):
-
     file_id_message = FileIdMessage()
     file_id_message.type = FileType.WORKOUT
     file_id_message.manufacturer = Manufacturer.DEVELOPMENT.value
