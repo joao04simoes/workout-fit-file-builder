@@ -15,12 +15,15 @@
 
         </div>
 
-
-        <div v-for="(value, index) in inter.Vmin" :key="index" class="rectangle" :style="{
-            width: `${inter.Vmin[index] / 100}px`,   // Width based on Vmin
-            height: `${inter.Vzone[index] * 10}px`, // Height based on Vzone
-            backgroundColor: 'red',
-        }">
+        <div class="container">
+            <div v-for="(value, index) in inter.Vmin" :key="index" class="rectangle" :style="{
+                width: `${inter.Vmin[index] / 100}px`,   // Width based on Vmin
+                height: `${inter.Vzone[index] * 20}px`, // Height based on Vzone
+                backgroundColor: 'red',
+                border: '1px solid white',
+            }">
+                <button for="removeStep " class="small-button" @click="removeStep(index)"> x </button>
+            </div>
         </div>
 
         <pre>{{ jsonData }}</pre>
@@ -67,10 +70,7 @@ export default {
                 if (this.ValueSeconds == "") {
                     this.ValueSeconds = 0
                 }
-
                 const totalSeconds = (parseInt(this.ValueMin, 10) * 1000) + (parseInt(this.ValueSeconds, 10) / 60 * 1000);
-
-
                 this.inter.Vmin.push(totalSeconds);
                 this.inter.Vzone.push(parseInt(this.Valuezone, 10));
                 // Clear input fields
@@ -79,15 +79,48 @@ export default {
                 this.ValueSeconds = "";
             }
         },
+        removeStep(index) {
+            this.inter.Vmin.splice(index, 1)
+            this.inter.Vzone.splice(index, 1)
+        },
     },
 };
 </script>
 
 <style scoped>
-.rectangle {
-    display: inline-block;
+.small-button {
+    font-size: 6px;
+    padding: 5px 5px;
+    background-color: #f0f0f0;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
 
 }
+
+.small-button:active {
+    transform: scale(0.95);
+    /* Shrinks slightly when clicked */
+}
+
+.container {
+    display: flex;
+    /* Enable Flexbox */
+    align-items: flex-end;
+    /* Align all items to the bottom */
+}
+
+.rectangle {
+    display: flex;
+    /* Allow button placement inside */
+    justify-content: center;
+    /* Center the button horizontally */
+    align-items: flex-start;
+    /* Position button at the top of the block */
+    flex-direction: column-reverse;
+    display: inline-block;
+}
+
 
 .label {
     font-weight: bold;
