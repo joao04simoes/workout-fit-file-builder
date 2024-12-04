@@ -1,15 +1,17 @@
 from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 from builder import workoutBuilder
+import dataBase
 import os
 app = Flask(__name__)
 CORS(app)  # Enables CORS for all routes
 
 
 class infoWorkout:
-    def __init__(self, min, zone):
+    def __init__(self):
         self.min = []
         self.zone = []
+        self.FileName = ""
 
 
 data = []
@@ -28,6 +30,7 @@ def post_data():
         data = request.get_json()
         infoWorkout.min = data["Vmin"]
         infoWorkout.zone = data["Vzone"]
+        infoWorkout.FileName = data["FileName"]
         workoutBuilder(infoWorkout)
         print("Received JSON Data:", data)
 

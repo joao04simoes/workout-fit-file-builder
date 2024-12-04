@@ -4,7 +4,7 @@
             <div class="button-group">
                 <button for="messageInput" class="label" @click="saveValue">Step</button>
                 <button for="RemoveAllSteps" class="label" @click="REmoveAllSteps">Remove all</button>
-                <button for="fetchData" class="label" @click="sendData">Send Data</button>
+                <button for="fetchData" class="label" @click="openPopup">Send Data</button>
             </div>
 
 
@@ -36,6 +36,14 @@
 
     </div>
 
+    <div v-if="isVisible" class="popup-overlay">
+        <div class="popup-content">
+            <input type="text" v-model="inter.FileName" />
+            <button class="close-btn" @click="sendData">X</button>
+            <slot></slot>
+        </div>
+    </div>
+
 </template>
 
 <script>
@@ -43,6 +51,7 @@ export default {
     name: "Step",
     data() {
         return {
+            isVisible: false,
             ValueMin: "0",      // Minutes input
             Valuezone: "",     // Zone input
             ValueSeconds: "0",
@@ -50,16 +59,25 @@ export default {
             inter: {
                 Vmin: [],  // Array for rectangle widths (calculated from minutes & seconds)
                 Vzone: [], // Array for rectangle heights (from zone)
+                FileName: "",
             },
         };
     },
+
+
     computed: {
         jsonData() {
             return JSON.stringify(this.inter, null, 2); // Format JSON data for display
         },
     },
     methods: {
+
+        openPopup() {
+            this.isVisible = true; // Abre o pop-up
+        },
+
         async sendData() {
+            this.isVisible = false
             if (this.inter.Vmin.length > 0 && this.inter.Vzone.length > 0) {
                 try {
                     // Send JSON data to the backend
@@ -74,13 +92,11 @@ export default {
                         },
                         body: jsonData,
                     });
-
-
                     if (response.ok) {
                         const blob = await response.blob();
                         const link = document.createElement('a');
                         link.href = URL.createObjectURL(blob);
-                        link.download = "tempo_bike_workout.fit";
+                        link.download = `${this.inter.FileName}.fit`;
                         link.click();
                     } else {
                         console.error("Error in response:", response.status, response.statusText);

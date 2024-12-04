@@ -1,5 +1,5 @@
 import datetime
-
+from dataBase import save_file_to_db
 from fit_tool.fit_file_builder import FitFileBuilder
 from fit_tool.profile.messages.file_id_message import FileIdMessage
 from fit_tool.profile.messages.workout_message import WorkoutMessage
@@ -42,5 +42,6 @@ def workoutBuilder(infoWorkout):
 
     fit_file = builder.build()
 
-    out_path = '/home/joaosimoes/Desktop/workout_fit_file_builder/tempo_bike_workout.fit'
+    out_path = f'./FitFiles/{infoWorkout.FileName}.fit'
     fit_file.to_file(out_path)
+    save_file_to_db(infoWorkout.FileName, out_path)
