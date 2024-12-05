@@ -43,6 +43,10 @@
             <slot></slot>
         </div>
     </div>
+    <div>
+        <input type="text" v-model="file_to_get" />
+        <button @click="GetFile"> Get</button>
+    </div>
 
 </template>
 
@@ -51,6 +55,7 @@ export default {
     name: "Step",
     data() {
         return {
+            file_to_get: "",
             isVisible: false,
             ValueMin: "0",      // Minutes input
             Valuezone: "",     // Zone input
@@ -76,12 +81,35 @@ export default {
             this.isVisible = true; // Abre o pop-up
         },
 
+        async GetFile() {
+            try {
+
+                const response = await fetch(`http://127.0.0.1:5000/api/fitFile?filename=${this.file_to_get}`, {
+                    method: "GET",
+                })
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = `${this.file_to_get}.fit`;
+                    link.click();
+                } else {
+                    console.error("Error in response:", response.status, response.statusText);
+                }
+            } catch (error) {
+                console.error("Error during fetch:", error);
+            }
+
+        },
+
+
         async sendData() {
             this.isVisible = false
             if (this.inter.Vmin.length > 0 && this.inter.Vzone.length > 0) {
                 try {
                     // Send JSON data to the backend
                     const jsonData = JSON.stringify(this.inter);
+
                     console.log("Sending data:", jsonData); // Debug output
 
                     // Enviar requisição POST para o backend
@@ -101,6 +129,7 @@ export default {
                     } else {
                         console.error("Error in response:", response.status, response.statusText);
                     }
+                    this.inter.FileName = ""
                 } catch (error) {
                     console.error("Error during fetch:", error);
                 }
