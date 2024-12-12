@@ -31,6 +31,7 @@ def save_file_to_db(filename, filepath):
     VALUES(?, ?)''', (filename, binary_data))
     conn.commit()
     conn.close()
+    return binary_data
 
 
 def GetFitFile_from_db(filename):

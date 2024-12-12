@@ -1,4 +1,5 @@
 import datetime
+import tempfile
 from dataBase import save_file_to_db
 from fit_tool.fit_file_builder import FitFileBuilder
 from fit_tool.profile.messages.file_id_message import FileIdMessage
@@ -42,6 +43,7 @@ def workoutBuilder(infoWorkout):
 
     fit_file = builder.build()
 
-    out_path = f'./FitFiles/{infoWorkout.FileName}.fit'
-    fit_file.to_file(out_path)
-    save_file_to_db(infoWorkout.FileName, out_path)
+    temp_file = tempfile.NamedTemporaryFile(delete=False)
+    fit_file.to_file(temp_file.name)
+    Bdata = save_file_to_db(infoWorkout.FileName, temp_file.name)
+    return Bdata
