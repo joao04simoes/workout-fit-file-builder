@@ -45,5 +45,5 @@ def workoutBuilder(infoWorkout):
 
     temp_file = tempfile.NamedTemporaryFile(delete=False)
     fit_file.to_file(temp_file.name)
-    Bdata = save_file_to_db(infoWorkout.FileName, temp_file.name)
-    return Bdata
+    Bindata = save_file_to_db(infoWorkout.FileName, temp_file.name)
+    return Bindata
