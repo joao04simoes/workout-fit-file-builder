@@ -46,3 +46,12 @@ def GetFitFile_from_db(filename):
         return binary_data
     else:
         return None
+
+
+def GetAllNameFiles():
+    conn = sqlite3.connect("./dataBase/fit_files.db")
+    cursor = conn.cursor()
+    cursor.execute(''' SELECT id,filename from fit_files''')
+    rows = cursor.fetchall()
+    conn.close
+    return rows

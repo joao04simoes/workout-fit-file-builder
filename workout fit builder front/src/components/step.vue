@@ -34,6 +34,7 @@
         </div>
 
 
+
     </div>
 
     <div v-if="isVisible" class="popup-overlay">
@@ -47,7 +48,17 @@
         <input type="text" v-model="file_to_get" />
         <button @click="GetFile"> Get</button>
     </div>
+    <div>
+        <button @click="getAllNames"> All names</button>
+    </div>
+    <div>
+        <ul v-if="AllfileNames">
+            <li v-for="(value, key) in AllfileNames" :key="key">
+                {{ key }}, {{ value }}
+            </li>
+        </ul>
 
+    </div>
 </template>
 
 <script>
@@ -61,6 +72,7 @@ export default {
             Valuezone: "",     // Zone input
             ValueSeconds: "0",
             zones: [1, 2, 3, 4, 5],  // Seconds input
+            AllfileNames: null,
             inter: {
                 Vmin: [],  // Array for rectangle widths (calculated from minutes & seconds)
                 Vzone: [], // Array for rectangle heights (from zone)
@@ -79,6 +91,24 @@ export default {
 
         openPopup() {
             this.isVisible = true; // Abre o pop-up
+        },
+        async getAllNames() {
+            try {
+
+                const response = await fetch(`http://127.0.0.1:5000/api/getAll`, {
+                    method: "GET",
+                })
+                if (response.ok) {
+                    this.AllfileNames = await response.json();
+
+
+                } else {
+                    console.error("Error in response:", response.status, response.statusText);
+                }
+            } catch (error) {
+                console.error("Error during fetch:", error);
+            }
+
         },
 
         async GetFile() {

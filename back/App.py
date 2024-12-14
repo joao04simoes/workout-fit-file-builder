@@ -1,7 +1,8 @@
 from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 from builder import workoutBuilder
-from dataBase import GetFitFile_from_db
+from dataBase import GetFitFile_from_db, GetAllNameFiles
+import json
 import os
 
 import tempfile
@@ -49,6 +50,14 @@ def getFitFile():
     )
     response.headers["Content-Disposition"] = "attachment; filename=tempo_bike_workout.fit"
     return response
+
+
+@app.route('/api/getAll', methods=['GET'])
+def getAllData():
+    rows = GetAllNameFiles()
+    allData = {key: value for key, value in rows}
+
+    return (json.dumps(allData, indent=4))
 
 
 @app.route('/api/data', methods=['POST'])
