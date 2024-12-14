@@ -55,9 +55,12 @@ def getFitFile():
 @app.route('/api/getAll', methods=['GET'])
 def getAllData():
     rows = GetAllNameFiles()
-    allData = {key: value for key, value in rows}
+    if rows:
+        allData = {key: value for key, value in rows}
 
-    return (json.dumps(allData, indent=4))
+        return (json.dumps(allData, indent=4))
+    else:
+        return jsonify({"error": " no names found"})
 
 
 @app.route('/api/data', methods=['POST'])
