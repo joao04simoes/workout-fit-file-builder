@@ -92,29 +92,19 @@
 body {
     margin: 0;
     font-family: 'Arial', sans-serif;
-    background-color: #1e1e2d;
+    background-color: #1a1f2d;
     color: #fff;
 }
 
-/* Header */
-.app-header {
-    background-color: #007bff;
-    padding: 10px 20px;
-    text-align: center;
-    color: #fff;
-    font-size: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-/* Main Container */
 .main-container {
     padding: 20px;
+    align-items: flex-start;
     display: flex;
     flex-direction: row;
     gap: 20px;
 }
 
-/* Input Section */
+
 .input-section {
     display: flex;
     flex-direction: column;
@@ -175,11 +165,14 @@ body {
     border: 1px solid #ddd;
 }
 
-/* Rectangles */
+
 .rectangle-container {
     display: flex;
-    gap: 15px;
+    align-items: flex-end;
+    justify-content: flex-start;
     flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
 }
 
 .rectangle {
@@ -187,9 +180,8 @@ body {
     border: 1px solid #fff;
     border-radius: 8px;
     display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
+    justify-content: center;
+    align-items: start;
     position: relative;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
@@ -207,31 +199,18 @@ body {
     color: #fff;
     border: none;
     border-radius: 3px;
-    padding: 3px 6px;
-    font-size: 0.8rem;
+    padding: 5px;
+    font-size: 0.7rem;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%;
 }
 
 .small-button:hover {
     background-color: #555;
+    transform: scale(1.1);
+
 }
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    .input-section {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .button-group {
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-}
-
-
-
 
 .fileNameButton {
     padding: 5px 10px;

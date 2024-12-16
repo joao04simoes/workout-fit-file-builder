@@ -1,30 +1,24 @@
 <template>
-    <div v-if="isVisible" class="popup-overlay">
-        <div class="popup-content">
-            <label>Filename</label>
-            <input type="text" v-model="inter.FileName" />
-            <button class="close-btn" @click="sendData">X</button>
 
-        </div>
+    <div>
+        <input class="Textinput" type="text" v-model="file_to_get" />
+        <button class="action-button" @click="GetFile(file_to_get, 1)"> Get</button>
     </div>
     <div>
-        <input type="text" v-model="file_to_get" />
-        <button @click="GetFile(file_to_get, 1)"> Get</button>
-    </div>
-    <div>
-        <button @click="getAllNames"> All names</button>
+        <button class="action-button" @click="getAllNames"> All names</button>
     </div>
     <div>
         <ul v-if="AllfileNames">
             <li v-for="(value, key) in AllfileNames" :key="key">
-                <button @click="showFitContent(key, value)" class="fileNameButton">{{ key }}, {{ value }}</button>
+                <button class="action-button" @click="showFitContent(key, value)">{{ key }}, {{
+                    value }}</button>
             </li>
         </ul>
 
     </div>
     <div v-if="FilePopUp > 0" class="popup-overlay">
         <div class="popupContentFile">
-            <div class="container">
+            <div class="rectangle-container">
                 <div v-for="(value, index) in Filedata.Vmin" :key="index" class="rectangle" :style="{
                     width: `${value / 100}px`,  // Use current Vmin value
                     height: `${Filedata.Vzones[index] * 20}px`, // Use corresponding Vzones value
@@ -34,7 +28,7 @@
                     {{ value }} * zone {{ Filedata.Vzones[index] }}
                 </div>
             </div>
-            <button class="close-btn" @click="closePopup">X</button>
+            <button class="action-button" @click="closePopup">X</button>
 
         </div>
 
@@ -124,4 +118,15 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.Textinput {
+    background: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 8px 12px;
+    font-size: 1rem;
+    width: 200px;
+    text-align: center;
+    outline: none;
+}
+</style>

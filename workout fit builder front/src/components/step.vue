@@ -32,6 +32,14 @@
                 </div>
             </div>
         </div>
+        <div v-if="isVisible" class="popup-overlay">
+            <div class="popup-content">
+                <label>Filename</label>
+                <input type="text" v-model="inter.FileName" />
+                <button class="close-btn" @click="sendData">X</button>
+
+            </div>
+        </div>
     </div>
 </template>
 
