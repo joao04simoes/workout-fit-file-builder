@@ -31,25 +31,36 @@ def home():
 @app.route('/api/fitFile', methods=['GET'])
 def getFitFile():
     fitFile = request.args.get('filename')
+    func = request.args.get('func')
     print(fitFile)
+    print(func)
     if not fitFile:
         return jsonify({"error": "O parâmetro 'filename' é obrigatório"}), 400
 
-    binaryData = GetFitFile_from_db(fitFile)
+    binaryData, minutes, zones = GetFitFile_from_db(fitFile)
     if not binaryData:
         return jsonify({"error": f"O ficheiro '{fitFile}' não foi encontrado"}), 404
 
     with tempfile.NamedTemporaryFile(delete=False) as temp_file:
         temp_file.write(binaryData)
 
-    response = send_file(
-        temp_file.name,
-        download_name=fitFile,
-        as_attachment=True,
-        mimetype="application/octet-stream"
-    )
-    response.headers["Content-Disposition"] = "attachment; filename=tempo_bike_workout.fit"
-    return response
+    if func == "2":
+        print("func 2")
+        response = {
+            "Vmin": minutes,
+            "Vzones": zones
+        }
+        return jsonify(response)
+    else:
+        print("func 1")
+        response = send_file(
+            temp_file.name,
+            download_name=fitFile,
+            as_attachment=True,
+            mimetype="application/octet-stream"
+        )
+        response.headers["Content-Disposition"] = "attachment; filename=tempo_bike_workout.fit"
+        return response
 
 
 @app.route('/api/getAll', methods=['GET'])

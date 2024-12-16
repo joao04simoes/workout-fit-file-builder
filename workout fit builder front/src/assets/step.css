@@ -1,4 +1,98 @@
+.popup-overlay {
+    position: fixed;
+    /* Ensures it stays in place during scrolling */
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* Covers the full screen */
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent black background */
+    display: flex;
+    /* Centers content */
+    align-items: center;
+    /* Vertically centers content */
+    justify-content: center;
+    /* Horizontally centers content */
+    z-index: 1000;
+    /* Ensures it appears above other elements */
+}
+
+.popup-content {
+    background-color: #fff;
+    /* White background for the popup */
+    border-radius: 10px;
+    /* Rounded corners */
+    padding: 20px;
+    /* Spacing inside the popup */
+    width: 300px;
+    /* Popup width */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Subtle shadow for depth */
+    text-align: center;
+    /* Centers text inside */
+}
+
+.popupContentFile {
+    background-color: #fff;
+    /* White background for the popup */
+    border-radius: 10px;
+    /* Rounded corners */
+    padding: 20px;
+    /* Spacing inside the popup */
+    width: 40%;
+    /* Popup width */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Subtle shadow for depth */
+    text-align: center;
+    /* Centers text inside */
+}
+
+.popup-content label {
+    color: #333;
+}
+
+.popup-content input {
+    width: 100%;
+    /* Full width input */
+    padding: 10px;
+    /* Spacing inside input */
+    margin-bottom: 15px;
+    /* Space between input and button */
+    border: 1px solid #ccc;
+    /* Light border */
+    border-radius: 5px;
+    /* Rounded input corners */
+    font-size: 14px;
+    /* Readable font size */
+}
+
+.popup-content .close-btn {
+    background-color: #f44336;
+    /* Red background */
+    color: white;
+    /* White text */
+    border: none;
+    /* Removes border */
+    border-radius: 5px;
+    /* Rounded button corners */
+    padding: 10px 15px;
+    /* Button padding */
+    cursor: pointer;
+    /* Pointer on hover */
+    font-size: 14px;
+    /* Button font size */
+}
+
+.popup-content .close-btn:hover {
+    background-color: #d32f2f;
+    /* Darker red on hover */
+}
+
+
+
 .small-button {
+    width: fit-content;
     font-size: 6px;
     padding: 5px 5px;
     background-color: #f0f0f0;
@@ -53,6 +147,13 @@
     /* Position button at the top of the block */
     flex-direction: column-reverse;
     display: inline-block;
+}
+
+.fileNameButton {
+    padding: 5px 10px;
+    font-size: 1em;
+    margin-bottom: 15px;
+    width: 120px;
 }
 
 

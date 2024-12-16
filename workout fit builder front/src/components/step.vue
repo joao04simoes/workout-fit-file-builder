@@ -39,14 +39,15 @@
 
     <div v-if="isVisible" class="popup-overlay">
         <div class="popup-content">
+            <label>Filename</label>
             <input type="text" v-model="inter.FileName" />
             <button class="close-btn" @click="sendData">X</button>
-            <slot></slot>
+
         </div>
     </div>
     <div>
         <input type="text" v-model="file_to_get" />
-        <button @click="GetFile"> Get</button>
+        <button @click="GetFile(file_to_get, 1)"> Get</button>
     </div>
     <div>
         <button @click="getAllNames"> All names</button>
@@ -54,9 +55,27 @@
     <div>
         <ul v-if="AllfileNames">
             <li v-for="(value, key) in AllfileNames" :key="key">
-                {{ key }}, {{ value }}
+                <button @click="showFitContent(key, value)" class="fileNameButton">{{ key }}, {{ value }}</button>
             </li>
         </ul>
+
+    </div>
+    <div v-if="FilePopUp > 0" class="popup-overlay">
+        <div class="popupContentFile">
+            <div class="container">
+                <div v-for="(value, index) in Filedata.Vmin" :key="index" class="rectangle" :style="{
+                    width: `${value / 100}px`,  // Use current Vmin value
+                    height: `${Filedata.Vzones[index] * 20}px`, // Use corresponding Vzones value
+                    backgroundColor: 'red',
+                    border: '1px solid white',
+                }">
+                    <button for="removeStep " class="small-button" @click="removeStep(index)"> x </button>
+                    <button for="duplicate" class="small-button" @click="duplicateStep(index)"> c </button>
+                </div>
+            </div>
+            <button class="close-btn" @click="closePopup">X</button>
+
+        </div>
 
     </div>
 </template>
@@ -66,13 +85,16 @@ export default {
     name: "Step",
     data() {
         return {
-            file_to_get: "",
+            //file_to_get: "",
             isVisible: false,
+            FilePopUp: "0",
             ValueMin: "0",      // Minutes input
             Valuezone: "",     // Zone input
             ValueSeconds: "0",
             zones: [1, 2, 3, 4, 5],  // Seconds input
             AllfileNames: null,
+            Filedata: null,
+            data: null,
             inter: {
                 Vmin: [],  // Array for rectangle widths (calculated from minutes & seconds)
                 Vzone: [], // Array for rectangle heights (from zone)
@@ -89,8 +111,16 @@ export default {
     },
     methods: {
 
+        showFitContent(key, value) {
+            this.GetFile(value, 2)
+            this.FilePopUp = key
+        },
+
         openPopup() {
             this.isVisible = true; // Abre o pop-up
+        },
+        closePopup() {
+            this.FilePopUp = 0
         },
         async getAllNames() {
             try {
@@ -111,17 +141,26 @@ export default {
 
         },
 
-        async GetFile() {
+        async GetFile(FileName, func) {
+
             try {
 
-                const response = await fetch(`http://127.0.0.1:5000/api/fitFile?filename=${this.file_to_get}`, {
+                const response = await fetch(`http://127.0.0.1:5000/api/fitFile?filename=${FileName}&func=${func}`, {
                     method: "GET",
                 })
-                if (response.ok) {
+                if (response.ok && func == 2) {
+                    this.data = await response.json()
+                    this.Filedata = {
+                        Vmin: JSON.parse(this.data.Vmin),   // Convert string to array
+                        Vzones: JSON.parse(this.data.Vzones) // Convert string to array
+                    };
+
+                }
+                if (response.ok && func == 1) {
                     const blob = await response.blob();
                     const link = document.createElement('a');
                     link.href = URL.createObjectURL(blob);
-                    link.download = `${this.file_to_get}.fit`;
+                    link.download = `${FileName}.fit`;
                     link.click();
                 } else {
                     console.error("Error in response:", response.status, response.statusText);
