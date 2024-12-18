@@ -8,19 +8,27 @@
                 <button class="action-button" @click="openPopup">Send Data</button>
             </div>
             <div class="input-group">
-                <input class="time-input" type="number" min="0" v-model="ValueMin" placeholder="Minutes" />
-                <span>:</span>
-                <input class="time-input" type="number" min="0" max="59" v-model="ValueSeconds" placeholder="Seconds" />
+                <input class="time-input" type="number" min="0" v-model="interval" placeholder="numero de intervalos" />
+                <input class="time-input" type="number" min="0" v-model="multiplier" placeholder="multi" />
+                <div v-for="(value, index) in interval  " :key="index">
+                    <input class="time-input" type="number" min="0" v-model="ValueMin[index]" placeholder="Minutes" />
+                    <span>:</span>
+                    <input class="time-input" type="number" min="0" max="59" v-model="ValueSeconds[index]"
+                        placeholder="Seconds" />
+
+                    <div class="zone-selection">
+                        <label for="zoneDropdown">Select a Zone:</label>
+                        <select v-model="Valuezone[index]" id="zoneDropdown" class="zone-dropdown">
+                            <option v-for="zone in zones" :key="zone" :value="zone">{{ zone }}</option>
+                        </select>
+                    </div>
+                </div>
+
             </div>
-            <div class="zone-selection">
-                <label for="zoneDropdown">Select a Zone:</label>
-                <select v-model="Valuezone" id="zoneDropdown" class="zone-dropdown">
-                    <option v-for="zone in zones" :key="zone" :value="zone">{{ zone }}</option>
-                </select>
-            </div>
+
         </div>
 
-        <!-- Rectangle Container -->
+
         <div class="rectangle-container">
             <div v-for="(value, index) in inter.Vmin" :key="index" class="rectangle" :style="{
                 width: `${inter.Vmin[index] / 100}px`,
@@ -51,9 +59,11 @@ export default {
         return {
             //file_to_get: "",
             isVisible: false,
-            ValueMin: "0",      // Minutes input
-            Valuezone: "",     // Zone input
-            ValueSeconds: "0",
+            interval: 1,
+            ValueMin: [],      // Minutes input
+            Valuezone: [],     // Zone input
+            ValueSeconds: [],
+            multiplier: 1,
             zones: [1, 2, 3, 4, 5],  // Seconds input
             inter: {
                 Vmin: [],  // Array for rectangle widths (calculated from minutes & seconds)
@@ -71,8 +81,12 @@ export default {
     },
     methods: {
         openPopup() {
-            this.isVisible = true; // Abre o pop-up
+            if (this.inter.Vmin.length > 0) {
+                this.isVisible = true; // Abre o pop-up
+            }
         },
+
+
         async GetFile(FileName, func) {
             try {
                 const response = await fetch(`http://127.0.0.1:5000/api/fitFile?filename=${FileName}&func=${func}`, {
@@ -118,7 +132,8 @@ export default {
                         link.download = `${this.inter.FileName}.fit`;
                         link.click();
                     } else {
-                        console.error("Error in response:", response.status, response.statusText);
+                        this.inter.Vmin.push(totalSeconds);
+                        this.inter.Vzone.push(parseInt(this.Valuezone, 10)); console.error("Error in response:", response.status, response.statusText);
                     }
                     this.inter.FileName = ""
                 } catch (error) {
@@ -129,24 +144,26 @@ export default {
             }
         },
 
-
-
-
         saveValue() {
-
-            if (this.ValueMin !== "" && this.Valuezone !== "") {
-                if (this.ValueSeconds == "") {
-                    this.ValueSeconds = 0
+            if (this.ValueMin.length > 0 && this.Valuezone.length > 0) {
+                for (let j = 0; j < this.multiplier; j++) {
+                    for (let i = 0; i < this.interval; i++) {
+                        if (this.ValueSeconds[i] > -1) {
+                            const totalSeconds = (parseInt(this.ValueMin[i], 10) * 1000) +
+                                (parseInt(this.ValueSeconds[i], 10) / 60 * 1000);
+                            this.inter.Vmin.push(totalSeconds);
+                            this.inter.Vzone.push(parseInt(this.Valuezone[i] || 0, 10));
+                        }
+                    }
                 }
-                const totalSeconds = (parseInt(this.ValueMin, 10) * 1000) + (parseInt(this.ValueSeconds, 10) / 60 * 1000);
-                this.inter.Vmin.push(totalSeconds);
-                this.inter.Vzone.push(parseInt(this.Valuezone, 10));
-                // Clear input fields
-                this.ValueMin = "";
-                this.Valuezone = "";
-                this.ValueSeconds = "";
+                this.ValueMin = [];
+                this.ValueSeconds = [];
+                this.Valuezone = [];
+            } else {
+                console.error("Inputs for minutes and zones are missing or empty.");
             }
         },
+
         removeStep(index) {
             this.inter.Vmin.splice(index, 1)
             this.inter.Vzone.splice(index, 1)
