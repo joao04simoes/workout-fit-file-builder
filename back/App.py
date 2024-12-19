@@ -4,6 +4,7 @@ from builder import workoutBuilder
 from dataBase import GetFitFile_from_db, GetAllNameFiles
 import json
 import os
+from calculadorPotencia.main import Potencia
 
 import tempfile
 
