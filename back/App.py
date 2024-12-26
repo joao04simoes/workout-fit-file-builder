@@ -1,8 +1,10 @@
 from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 from builder import workoutBuilder
-from dataBase import GetFitFile_from_db
+from dataBase import GetFitFile_from_db, GetAllNameFiles
+import json
 import os
+from calculadorPotencia.main import Potencia
 
 import tempfile
 
@@ -19,36 +21,68 @@ class infoWorkout:
 
 data = []
 
-# Example route
-
 
 @app.route('/')
 def home():
     return "Welcome to the Flask API!"
 
 
+@app.route('/api/potencia', methods=['GET'])
+def getPotencia():
+    path = request.args.get('path')
+    print(path)
+    if not path:
+        return jsonify({"error": "O parâmetro 'path' é obrigatório"}), 400
+
+    power = Potencia(path)
+
+    return jsonify(power)
+
+
 @app.route('/api/fitFile', methods=['GET'])
 def getFitFile():
     fitFile = request.args.get('filename')
+    func = request.args.get('func')
     print(fitFile)
+    print(func)
     if not fitFile:
         return jsonify({"error": "O parâmetro 'filename' é obrigatório"}), 400
 
-    binaryData = GetFitFile_from_db(fitFile)
+    binaryData, minutes, zones = GetFitFile_from_db(fitFile)
     if not binaryData:
         return jsonify({"error": f"O ficheiro '{fitFile}' não foi encontrado"}), 404
 
     with tempfile.NamedTemporaryFile(delete=False) as temp_file:
         temp_file.write(binaryData)
 
-    response = send_file(
-        temp_file.name,
-        download_name=fitFile,
-        as_attachment=True,
-        mimetype="application/octet-stream"
-    )
-    response.headers["Content-Disposition"] = "attachment; filename=tempo_bike_workout.fit"
-    return response
+    if func == "2":
+        print("func 2")
+        response = {
+            "Vmin": minutes,
+            "Vzones": zones
+        }
+        return jsonify(response)
+    else:
+        print("func 1")
+        response = send_file(
+            temp_file.name,
+            download_name=fitFile,
+            as_attachment=True,
+            mimetype="application/octet-stream"
+        )
+        response.headers["Content-Disposition"] = "attachment; filename=tempo_bike_workout.fit"
+        return response
+
+
+@app.route('/api/getAll', methods=['GET'])
+def getAllData():
+    rows = GetAllNameFiles()
+    if rows:
+        allData = {key: value for key, value in rows}
+
+        return (json.dumps(allData, indent=4))
+    else:
+        return jsonify({"error": " no names found"})
 
 
 @app.route('/api/data', methods=['POST'])

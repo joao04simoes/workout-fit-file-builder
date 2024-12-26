@@ -1,58 +1,222 @@
-.small-button {
-    font-size: 6px;
-    padding: 5px 5px;
-    background-color: #f0f0f0;
-    color: #333;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-
-}
-
-.small-button:active {
-    transform: scale(0.95);
-    /* Shrinks slightly when clicked */
-}
-
-.container {
+.popup-overlay {
+    position: fixed;
+    /* Ensures it stays in place during scrolling */
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* Covers the full screen */
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent black background */
     display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    max-width: 100%;
+    /* Centers content */
+    align-items: center;
+    /* Vertically centers content */
+    justify-content: center;
+    /* Horizontally centers content */
+    z-index: 1000;
+    /* Ensures it appears above other elements */
+}
+
+.popup-content {
+    background-color: #fff;
+    /* White background for the popup */
+    border-radius: 10px;
+    /* Rounded corners */
+    padding: 20px;
+    /* Spacing inside the popup */
+    width: 300px;
+    /* Popup width */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Subtle shadow for depth */
+    text-align: center;
+    /* Centers text inside */
+}
+
+.popupContentFile {
+    background-color: #fff;
+    /* White background for the popup */
+    border-radius: 10px;
+    /* Rounded corners */
+    padding: 20px;
+    /* Spacing inside the popup */
+    width: 40%;
+    /* Popup width */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Subtle shadow for depth */
+    text-align: center;
+    /* Centers text inside */
+}
+
+.popup-content label {
+    color: #333;
+}
+
+.popup-content input {
+    width: 100%;
+    /* Full width input */
+    padding: 10px;
+    /* Spacing inside input */
+    margin-bottom: 15px;
+    /* Space between input and button */
+    border: 1px solid #ccc;
+    /* Light border */
+    border-radius: 5px;
+    /* Rounded input corners */
+    font-size: 14px;
+    /* Readable font size */
+}
+
+.popup-content .close-btn {
+    background-color: #f44336;
+    /* Red background */
+    color: white;
+    /* White text */
+    border: none;
+    /* Removes border */
+    border-radius: 5px;
+    /* Rounded button corners */
+    padding: 10px 15px;
+    /* Button padding */
+    cursor: pointer;
+    /* Pointer on hover */
+    font-size: 14px;
+    /* Button font size */
+}
+
+.popup-content .close-btn:hover {
+    background-color: #d32f2f;
+    /* Darker red on hover */
+}
+
+body {
     margin: 0;
-    gap: 10px;
-    /* Espaço entre os retângulos */
+    font-family: 'Arial', sans-serif;
+    background-color: #1a1f2d;
+    color: #fff;
+}
+
+.main-container {
+    padding: 20px;
+    align-items: flex-start;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
 }
 
 
-.input {
+.input-section {
     display: flex;
     flex-direction: column;
-
+    gap: 15px;
 }
 
 .button-group {
     display: flex;
-    flex-direction: row;
+    gap: 10px;
 }
 
-.mainContainer {
+.action-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.action-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.input-group {
     display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.time-input {
+    background: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 8px 12px;
+    font-size: 1rem;
+    width: 70px;
+    text-align: center;
+    outline: none;
+}
+
+.time-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.zone-selection label {
+    margin-right: 10px;
+}
+
+.zone-dropdown {
+    padding: 8px 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+
+.rectangle-container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
     flex-wrap: wrap;
-    flex-direction: column;
-    align-items: start;
-    gap: 40px;
-    justify-content: end
+    margin: 0;
+    padding: 0;
 }
 
 .rectangle {
+    background-color: #ff4d4d;
+    border: 1px solid #fff;
+    border-radius: 8px;
     display: flex;
-    /* Allow button placement inside */
     justify-content: center;
-    /* Center the button horizontally */
-    align-items: flex-start;
-    /* Position button at the top of the block */
-    flex-direction: column-reverse;
-    display: inline-block;
+    align-items: start;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.rectangle-buttons {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: flex;
+    gap: 5px;
+}
+
+.small-button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    padding: 5px;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%;
+}
+
+.small-button:hover {
+    background-color: #555;
+    transform: scale(1.1);
+
+}
+
+.fileNameButton {
+    padding: 5px 10px;
+    font-size: 1em;
+    margin-bottom: 15px;
+    width: 120px;
 }
 
 
