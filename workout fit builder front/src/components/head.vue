@@ -3,6 +3,7 @@
         <nav class="navLinks">
             <router-link class="navLink" to="/joao.simoes/">Workout Builder</router-link>
             <router-link class="navLink" to="/joao.simoes/get/">Get Files</router-link>
+            <router-link class="navLink" to="/joao.simoes/analyse/">Analyse</router-link>
         </nav>
     </div>
 </template>

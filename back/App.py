@@ -21,12 +21,22 @@ class infoWorkout:
 
 data = []
 
-# Example route
-
 
 @app.route('/')
 def home():
     return "Welcome to the Flask API!"
+
+
+@app.route('/api/potencia', methods=['GET'])
+def getPotencia():
+    path = request.args.get('path')
+    print(path)
+    if not path:
+        return jsonify({"error": "O parâmetro 'path' é obrigatório"}), 400
+
+    power = Potencia(path)
+
+    return jsonify(power)
 
 
 @app.route('/api/fitFile', methods=['GET'])
