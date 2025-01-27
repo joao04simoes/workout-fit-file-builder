@@ -20,6 +20,7 @@ class infoWorkout:
 
 
 data = []
+data = []
 
 
 @app.route('/')
