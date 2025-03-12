@@ -1,7 +1,7 @@
 import sqlite3
 import json
 # Criar conexão
-conn = sqlite3.connect("./dataBase/fit_files.db")
+conn = sqlite3.connect("./workout-fit-file-builder/back/dataBase/fit_files.db")
 cursor = conn.cursor()
 
 
@@ -29,7 +29,8 @@ def save_file_to_db(filename, filepath, minutes, zones):
         minutes, list) else minutes
     zones_json = json.dumps(zones) if isinstance(zones, list) else zones
 
-    conn = sqlite3.connect("./dataBase/fit_files.db")
+    conn = sqlite3.connect(
+        "./workout-fit-file-builder/back/dataBase/fit_files.db")
     cursor = conn.cursor()
     cursor.execute('''
     INSERT INTO fit_files(filename, binaryData,minutes,zones)
@@ -40,7 +41,8 @@ def save_file_to_db(filename, filepath, minutes, zones):
 
 
 def GetFitFile_from_db(filename):
-    conn = sqlite3.connect("./dataBase/fit_files.db")
+    conn = sqlite3.connect(
+        "./workout-fit-file-builder/back/dataBase/fit_files.db")
     cursor = conn.cursor()
     cursor.execute('''
     SELECT binaryData,minutes,zones from fit_files where filename = ?''', (filename,))
@@ -53,7 +55,8 @@ def GetFitFile_from_db(filename):
 
 
 def GetAllNameFiles():
-    conn = sqlite3.connect("./dataBase/fit_files.db")
+    conn = sqlite3.connect(
+        "./workout-fit-file-builder/back/dataBase/fit_files.db")
     cursor = conn.cursor()
     cursor.execute(''' SELECT id,filename from fit_files''')
     rows = cursor.fetchall()

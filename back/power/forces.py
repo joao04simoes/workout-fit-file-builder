@@ -1,5 +1,5 @@
 import math
-from calculadorPotencia.wind import WindSpeedAndDir, wind
+from power.wind import WindSpeedAndDir, wind
 import pandas as pd
 
 

@@ -1,5 +1,5 @@
 import math
-from forces import CalculateSlope, PotenciaGravidade, PowerResistenceAir, PowerRollingRestiance
+from power.forces import CalculateSlope, PotenciaGravidade, PowerResistenceAir, PowerRollingRestiance
 from fit_tool.fit_file import FitFile
 from fit_tool.profile.messages.record_message import RecordMessage
 from datetime import datetime, timezone
