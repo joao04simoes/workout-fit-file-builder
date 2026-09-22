@@ -8,9 +8,17 @@ def CalculateSlope(dataPoint, nPoints,):
         if (dataPoint[i+1].altitude - dataPoint[i].altitude) != 0 and dataPoint[i+1].distance - dataPoint[i].distance != 0:
             slope = ((dataPoint[i+1].altitude - dataPoint[i].altitude) /
                      (dataPoint[i+1].distance - dataPoint[i].distance))
-            dataPoint[i].slope = math.atan(slope)
-
+            if abs(slope) < 0.30:
+                dataPoint[i].slope = math.atan(slope)
         else:
+            # if (dataPoint[i].distance > 24519 and dataPoint[i].distance < 24720):
+            # print("distance", dataPoint[i].distance)
+            # print("distance next", dataPoint[i+1].distance)
+            # print("altitude", dataPoint[i].altitude)
+            # print("altitude next", dataPoint[i+1].altitude)
+            # print("before slope", dataPoint[i-1].slope)
+            # print("---------------------")
+
             dataPoint[i].slope = 0
 
 
@@ -25,30 +33,39 @@ def PotenciaGravidade(dataPoint, nPoints, bikeConstants):
     return max
 
 
-def PowerResistenceAir(dataPoint, nPoints, bikeConstants, roundedlist):
+def calculateWindFavor(dataPoint, roundedlist):
     timestamp = pd.Timestamp(dataPoint[0].time,)
     rounded_timestamp = timestamp - \
         pd.Timedelta(minutes=timestamp.minute %
                      15, seconds=timestamp.second, microseconds=timestamp.microsecond)
-    max = 0
-    soma = 0
-    wFavor = 0
+
     minutely_15_dataframe = wind(
         rounded_timestamp, roundedlist)
-    for i in range(0, nPoints-1):
+
+    wFavor = []
+
+    for i in range(0, len(dataPoint)-1):
         (windDir, windSpeed) = WindSpeedAndDir(
             dataPoint, i, minutely_15_dataframe)
-        wFavor = windFavor(dataPoint, windDir, windSpeed, i)
-        # wFavor = 0
-        # print(wFavor)
+        wFavor.append(windFavor(dataPoint, windDir, windSpeed, i))
+
+    return wFavor
+
+
+def PowerResistenceAir(dataPoint, nPoints, bikeConstants, windFavor):
+
+    max = 0
+    soma = 0
+
+    for i in range(0, nPoints-1):
+
         force = 0.5 * bikeConstants.CdA * \
-            bikeConstants.density * ((dataPoint[i].speed + wFavor) ** 2)
+            bikeConstants.density * ((dataPoint[i].speed + windFavor[i]) ** 2)
         dataPoint[i].powerAir = force * dataPoint[i].speed
         if dataPoint[i].powerAir > max:
             max = dataPoint[i].powerAir
         soma = soma + dataPoint[i].powerAir
-    print(soma)
-    soma = soma / (nPoints-1)
+
     return max
 
 

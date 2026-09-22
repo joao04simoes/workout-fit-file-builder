@@ -30,14 +30,17 @@ def home():
 
 @app.route('/api/potencia', methods=['GET'])
 def getPotencia():
-    path = request.args.get('path')
-    print(path)
-    if not path:
-        return jsonify({"error": "O parâmetro 'path' é obrigatório"}), 400
+    # path = request.args.get('path')
+    # print(path)
+    # if not path:
+    #    return jsonify({"error": "O parâmetro 'path' é obrigatório"}), 400
+    #
+    path = "./workout-fit-file-builder/back/bmc_estrada/real_power_26_06.fit"
+    pathCvs = "./workout-fit-file-builder/back/race1.csv"
+    laps = Potencia(path, True)
+    # laps = Potencia(path, True)
 
-    power = Potencia(path)
-
-    return jsonify(power)
+    return laps
 
 
 @app.route('/api/fitFile', methods=['GET'])

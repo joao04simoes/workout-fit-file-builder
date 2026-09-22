@@ -1,0 +1,23 @@
+26 -06 {'CRR': 0.009, 'CDA': 0.32, 'losses': 0.02, 'media calculada': np.float32(200.65218), 'media real': np.float64(200.6803118908382), 'diferenca': np.float64(-0.02813598751788504)}
+4 - 07 {'CRR': 0.008, 'CDA': 0.24, 'losses': 0.04, 'media calculada': np.float32(199.99052), 'media real': np.float64(200.00681099489177), 'diferenca': np.float64(-0.016286702899577676)}
+5 - 07 {'CRR': 0.005, 'CDA': 0.34, 'losses': 0.08, 'media calculada': np.float32(239.60518), 'media real': np.float64(239.62630622444343), 'diferenca': np.float64(-0.021127391435612708)}
+6 - 07 {'CRR': 0.004, 'CDA': 0.42, 'losses': 0.04, 'media calculada': np.float32(181.00688), 'media real': np.float64(181.0077339520495), 'diferenca': np.float64(-0.0008522381823183878)}
+todos juntos Best parameters found: Crr=0.011, CdA=0.18, Losses=0.07
+
+
+
+after slope moving avereage
+
+Best parameters found: Crr=0.015, CdA=0.2, Losses=0.045
+Best score: 6.082673555908514
+Top 10 parameter combinations:
+01. score=6.082674 | Crr=0.015 | CdA=0.2 | Losses=0.045
+02. score=6.344984 | Crr=0.013 | CdA=0.26 | Losses=0.035
+03. score=6.438269 | Crr=0.015 | CdA=0.2 | Losses=0.05
+04. score=6.700487 | Crr=0.015 | CdA=0.22 | Losses=0.02
+05. score=6.708234 | Crr=0.014 | CdA=0.22 | Losses=0.05
+06. score=6.745361 | Crr=0.014 | CdA=0.24 | Losses=0.03
+07. score=6.789664 | Crr=0.012 | CdA=0.28 | Losses=0.04
+08. score=6.979117 | Crr=0.014 | CdA=0.24 | Losses=0.025
+09. score=7.133195 | Crr=0.015 | CdA=0.2 | Losses=0.04
+10. score=7.266920 | Crr=0.011 | CdA=0.3 | Losses=0.045 good 
